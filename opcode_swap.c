@@ -7,13 +7,16 @@
  */
 void swap(stack_t **stack, unsigned int line_number)
 {
+
+    int temp;  /* Declare variables at the beginning */
+
     if (*stack == NULL || (*stack)->next == NULL)
     {
         fprintf(stderr, "L%u: can't swap, stack too short\n", line_number);
         exit(EXIT_FAILURE);
     }
 
-    int temp = (*stack)->n;
+    temp = (*stack)->n;  /* Store the value from the top of the stack */
     (*stack)->n = (*stack)->next->n;
     (*stack)->next->n = temp;
 }
