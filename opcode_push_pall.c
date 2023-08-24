@@ -37,3 +37,22 @@ void push(stack_t **stack, unsigned int line_number)
 
     *stack = new_node;
 }
+
+/**
+ * pall - Prints the values of a stack_t linked list.
+ * @stack: A pointer to the top mode node of a stack_t linked list.
+ * @line_number: The current working line number of a Monty bytecodes file.
+ */
+
+void pall(stack_t **stack, unsigned int line_number)
+{
+    stack_t *current = *stack;
+
+    (void)line_number; /* Suppress unused parameter warning */
+
+    while (current)
+    {
+        printf("%d\n", current->n);
+        current = current->next;
+    }
+}
