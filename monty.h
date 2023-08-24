@@ -6,6 +6,11 @@
 #include <string.h>
 #include <ctype.h> 
 
+#define STACK 0
+#define QUEUE 1
+
+extern char **op_toks;
+
 typedef struct stack_s
 {
         int n;
@@ -19,6 +24,9 @@ typedef struct instruction_s
         void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
+int check_mode(stack_t *stack);
+void set_op_tok_error(int error_code);
+
 void push(stack_t **stack, unsigned int line_number);
 void pall(stack_t **stack, unsigned int line_number);
 void pint(stack_t **stack, unsigned int line_number);
@@ -26,6 +34,9 @@ void pop(stack_t **stack, unsigned int line_number);
 void swap(stack_t **stack, unsigned int line_number);
 void add(stack_t **stack, unsigned int line_number);
 void nop(stack_t **stack, unsigned int line_number);
+
+int malloc_error(void);
+int no_int_error(unsigned int line_number);
 
 #endif /* MONTY_H */
 

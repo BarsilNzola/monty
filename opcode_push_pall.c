@@ -6,36 +6,56 @@
  * @line_number: Line number being executed from the file.
  * @value: Value to push onto the stack.
  */
+
 void push(stack_t **stack, unsigned int line_number)
 {
-    stack_t *new_node;
+    stack_t *tmp, *new;
+    int i;
 
-    char *arg = strtok(NULL, " \n");
-    int num;
-
-    if (!arg || (!isdigit((unsigned char)*arg) && *arg != '-'))
-    {
-        fprintf(stderr, "L%u: usage: push integer\n", line_number);
-        exit(EXIT_FAILURE);
-    }
-
-    num = atoi(arg);
-
-    new_node = malloc(sizeof(stack_t));
-    if (!new_node)
+    new = malloc(sizeof(stack_t));
+    if (new == NULL)
     {
         fprintf(stderr, "Error: malloc failed\n");
         exit(EXIT_FAILURE);
     }
 
-    new_node->n = num;
-    new_node->prev = NULL;
-    new_node->next = *stack;
+    if (op_toks[1] == NULL)
+    {
+        fprintf(stderr, "L%u: usage: push integer\n", line_number);
+        exit(EXIT_FAILURE);
+    }
 
-    if (*stack)
-        (*stack)->prev = new_node;
+    for (i = 0; op_toks[1][i]; i++)
+    {
+        if (op_toks[1][i] == '-' && i == 0)
+            continue;
+        if (op_toks[1][i] < '0' || op_toks[1][i] > '9')
+        {
+            fprintf(stderr, "L%u: usage: push integer\n", line_number);
+            exit(EXIT_FAILURE);
+        }
+    }
 
-    *stack = new_node;
+	new->n = atoi(op_toks[1]);
+
+	if (check_mode(*stack) == STACK)
+	{
+		tmp = (*stack)->next;
+		new->prev = *stack;
+		new->next = tmp;
+		if (tmp)
+			tmp->prev = new;
+		(*stack)->next = new;
+	}
+	else
+	{
+		tmp = *stack;
+		while (tmp->next)
+			tmp = tmp->next;
+		new->prev = tmp;
+		new->next = NULL;
+		tmp->next = new;
+	}
 }
 
 /**
@@ -46,13 +66,12 @@ void push(stack_t **stack, unsigned int line_number)
 
 void pall(stack_t **stack, unsigned int line_number)
 {
-    stack_t *current = *stack;
+    stack_t *tmp = (*stack)->next;
 
-    (void)line_number; /* Suppress unused parameter warning */
-
-    while (current)
+    while (tmp)
     {
-        printf("%d\n", current->n);
-        current = current->next;
+        printf("%d\n", tmp->n);
+        tmp = tmp->next;
     }
+    (void)line_number;
 }
