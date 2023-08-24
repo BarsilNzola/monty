@@ -6,10 +6,6 @@
 #include <string.h>
 #include <ctype.h> 
 
-#define STACK 0
-#define QUEUE 1
-
-extern char **op_toks;
 
 typedef struct stack_s
 {
